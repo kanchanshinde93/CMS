@@ -1,7 +1,7 @@
-import { Component, OnDestroy, OnInit } from "@angular/core";
+import { Component, OnDestroy, OnInit, ViewChild } from "@angular/core";
 import { Subject } from "rxjs";
 import { AdminService } from "app/services/admin.service";
-import { ColumnMode } from "@swimlane/ngx-datatable";
+import { ColumnMode, DatatableComponent, SelectionType } from '@swimlane/ngx-datatable';
 
 @Component({
   selector: "app-home",
@@ -25,7 +25,8 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   public selectedStatus = [];
   public searchValue = "";
-
+  @ViewChild(DatatableComponent) table: DatatableComponent | any;
+  @ViewChild('tableRowDetails') tableRowDetails: any;
   // decorator
 
   // private
@@ -38,13 +39,17 @@ export class HomeComponent implements OnInit, OnDestroy {
   // public
   public contentHeader: object;
   public searchText: string;
+  ListData: any;
+  kitchenSinkRows: any;
+  filteredData: any;
+  userId: string;
 
   // private
 
   /**
    * Constructor
    *
-   * @param {AdminService} adminService
+   *
    */
   constructor(private adminService: AdminService) {
     this._unsubscribeAll = new Subject();
@@ -79,6 +84,21 @@ export class HomeComponent implements OnInit, OnDestroy {
         ],
       },
     };
+    this.getAllList()
+  }
+
+  getAllList() {
+    this.adminService.getallList().subscribe((data: any) => {
+      this.ListData = data.data;
+      console.log(data.data);
+     this.userId= localStorage.getItem("user_id")
+     console.log( this.userId);
+      this.rows = data.data[this.userId];
+      console.log(  this.rows);
+      this.tempData = this.rows;
+      this.kitchenSinkRows = this.ListData;
+      this.filteredData = this.ListData;
+    })
   }
   ngOnDestroy(): void {
     // Unsubscribe from all subscriptions

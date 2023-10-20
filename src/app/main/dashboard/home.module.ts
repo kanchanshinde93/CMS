@@ -22,7 +22,7 @@ const routes = [
 
 @NgModule({
   declarations: [ HomeComponent],
-  imports: [RouterModule.forChild(routes), ContentHeaderModule,NgbModule, CoreCommonModule,  TranslateModule, CoreCommonModule,NgxDatatableModule],
+  imports: [RouterModule.forChild(routes), ContentHeaderModule,NgbModule, CoreCommonModule, TranslateModule, CoreCommonModule,NgxDatatableModule],
   exports: [HomeComponent],
 })
 export class HomeModule {}

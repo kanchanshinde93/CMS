@@ -5,6 +5,8 @@ import { takeUntil } from "rxjs/operators";
 import { Subject } from "rxjs";
 import { Router } from "@angular/router";
 import { CoreConfigService } from "@core/services/config.service";
+import { AdminService } from "app/services/admin.service";
+
 
 @Component({
   selector: "app-auth-login-v2",
@@ -30,7 +32,7 @@ export class AuthLoginV2Component implements OnInit {
    *
    * @param {CoreConfigService} _coreConfigService
    */
-  constructor(private _coreConfigService: CoreConfigService, private _formBuilder: UntypedFormBuilder, private _route: ActivatedRoute, private _router: Router) {
+  constructor(private _coreConfigService: CoreConfigService,private adminService: AdminService, private _formBuilder: UntypedFormBuilder, private _route: ActivatedRoute, private _router: Router) {
     this._unsubscribeAll = new Subject();
 
     // Configure the layout
@@ -70,18 +72,24 @@ export class AuthLoginV2Component implements OnInit {
     if (this.loginForm.invalid) {
       return;
     }
-    console.log("===========");
-    localStorage.setItem("user_id","1")
-
-    // Login
-    this.loading = true;
+    else{
+      const formData ={
+        "username":this.loginForm.value.email,
+        "password":this.loginForm.value.password
+      }
+      this.adminService.login(formData).subscribe((data:any)=>{
+        this._router.navigate(["/"]);
+        
+      })
+    }
+  
 
     // redirect to home page
-    setTimeout(() => {
+    /* setTimeout(() => {
       this.loading = false;
       this._router.navigate(["/"]);
 
-    }, 100);
+    }, 100); */
   }
 
   // Lifecycle Hooks
@@ -92,7 +100,7 @@ export class AuthLoginV2Component implements OnInit {
    */
   ngOnInit(): void {
     this.loginForm = this._formBuilder.group({
-      email: ["", [Validators.required, Validators.email]],
+      email: ["", [Validators.required]],
       password: ["", Validators.required],
     });
 
