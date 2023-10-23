@@ -12,7 +12,8 @@ import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
 export class HomeComponent implements OnInit, OnDestroy {
   // public
   public data: any;
-  public selectedOption = 10;
+ 
+  public basicSelectedOption: number = 10;
   public ColumnMode = ColumnMode;
   public selectStatus: any = [
     { name: "All", value: "" },
@@ -103,6 +104,20 @@ export class HomeComponent implements OnInit, OnDestroy {
       this.filteredData = this.ListData;
     })
   }
+  /* filterUpdate(event: any) {
+    const val = event.target.value.toLowerCase();
+    // filter our data
+    this.rows = this.ListData.filter(function (d) {
+
+      return d.name?.toLowerCase().indexOf(val) !== -1  ;
+    });
+
+
+
+    // update the rows
+    this.kitchenSinkRows = this.rows;
+
+  } */
   ngOnDestroy(): void {
     // Unsubscribe from all subscriptions
     this._unsubscribeAll.next();
