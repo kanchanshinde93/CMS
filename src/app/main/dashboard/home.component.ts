@@ -2,6 +2,7 @@ import { Component, OnDestroy, OnInit, ViewChild } from "@angular/core";
 import { Subject } from "rxjs";
 import { AdminService } from "app/services/admin.service";
 import { ColumnMode, DatatableComponent, SelectionType } from '@swimlane/ngx-datatable';
+import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
 
 @Component({
   selector: "app-home",
@@ -43,6 +44,8 @@ export class HomeComponent implements OnInit, OnDestroy {
   kitchenSinkRows: any;
   filteredData: any;
   userId: string;
+  customerData: any;
+  name:any
 
   // private
 
@@ -51,7 +54,7 @@ export class HomeComponent implements OnInit, OnDestroy {
    *
    *
    */
-  constructor(private adminService: AdminService) {
+  constructor(private adminService: AdminService,private modalService: NgbModal) {
     this._unsubscribeAll = new Subject();
   }
 
@@ -94,7 +97,7 @@ export class HomeComponent implements OnInit, OnDestroy {
      this.userId= localStorage.getItem("user_id")
      console.log( this.userId);
       this.rows = data.data[this.userId];
-      console.log(  this.rows);
+      this.name=  this.rows[0]?.name;
       this.tempData = this.rows;
       this.kitchenSinkRows = this.ListData;
       this.filteredData = this.ListData;
@@ -105,4 +108,31 @@ export class HomeComponent implements OnInit, OnDestroy {
     this._unsubscribeAll.next();
     this._unsubscribeAll.complete();
   }
+  // modal delete promo
+  modalBannerDelete(bannerDelete:any) {
+    this.modalService.open(bannerDelete, {
+      centered: true,
+    });
+  }
+
+  modalOPenCall(body:any,cutsData:any){
+    this.customerData=cutsData;
+    console.log(this.customerData);
+    
+    this.modalService.open(body, {
+      centered: true,
+      size: 'lg'
+    });
+  }
+
+
+  changeStutes(stutes:any){
+  let body=  {
+      "status":stutes,
+  }
+  console.log(body);
+this.adminService.changeStatus(this.customerData.leadId,body).subscribe((data: any) => {
+  console.log(data)
+}) 
+}
 }

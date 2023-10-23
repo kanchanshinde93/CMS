@@ -31,14 +31,14 @@
               </a>
               <div class="card" style="background-image: url('assets/images/banner/banner.png')">
                 <div class="card-body text-center pt-2">
-                  <h5>Name of customer</h5>
-                  <p class="card-text font-small-3">email</p>
+                  <h5>Name of customer-{{name}}</h5>
+                  <p class="card-text font-small-3">contact-{{rows[0]?.contact}}</p>
                   <h3 class="mb-75 pb-2">
                     <a href="javascript:void(0);">$48.9k</a>
                   </h3>
                   <div class="d-flex justify-content-around">
                     <button type="button" class="btn btn-primary" rippleEffect>Skip</button>
-                    <button type="button" class="btn btn-primary" rippleEffect>Call</button>
+                    <button type="button" class="btn btn-primary" rippleEffect (click)="modalOPenCall(openModel,rows[0])">Call</button>
                   </div>
                 </div>
               </div>
@@ -99,13 +99,13 @@
                             [scrollbarH]="true">
                             <ngx-datatable-column name="Serial" prop="serial" [width]="150"></ngx-datatable-column>
                             <ngx-datatable-column name=" Name" prop="name" [width]="150"></ngx-datatable-column>
-                            <ngx-datatable-column name="Contact" prop="contact" [width]="150">
-                             <!--    <ng-template let-closeStatus="Zone" ngx-datatable-cell-template>
+                             <!--  <ngx-datatable-column name="Contact" prop="contact" [width]="150">
+                              <ng-template let-closeStatus="Zone" ngx-datatable-cell-template>
                                     <div class="badge badge-pill" [ngClass]="selectButtonClass(closeStatus)">
                                       {{ closeStatus }}
                                     </div>
-                                  </ng-template> -->
-                            </ngx-datatable-column>
+                                  </ng-template> 
+                            </ngx-datatable-column>-->
                             <ngx-datatable-column name="Zone" prop="zone" [width]="150"></ngx-datatable-column>
                             <ngx-datatable-column name="status" prop="status" [width]="150"></ngx-datatable-column>
                             <ngx-datatable-column name="Is Active" prop="isActive" [width]="150">
@@ -148,3 +148,58 @@
 
   </div>
 </div>
+<!-- Modal delete Promo-->
+<ng-template #openModel let-modal>
+  <div class="modal-header">
+    <h5 class="modal-title" id="exampleModalCenterTitle">Call Action?</h5>
+    <!-- <button
+      type="button"
+      class="close"
+      (click)="modal.dismiss('Cross click')"
+      aria-label="Close"
+    >
+      <span aria-hidden="true">&times;</span>
+    </button> -->
+  </div>
+  <div class="modal-body" tabindex="0" ngbAutofocus>
+    
+    <div class="modal-footer">
+      <button
+        type="button"
+        class="btn btn-outline-primary"
+        (click)="changeStutes('Completed')"
+        rippleEffect
+      >
+      Completed
+      </button>
+      <button
+      type="button"
+      class="btn btn-outline-primary"
+      (click)="changeStutes('rejected')"
+      rippleEffect
+    >
+    Rejected
+    </button>
+    <button
+    type="button"
+    class="btn btn-outline-primary"
+    (click)="changeStutes('not_answered')"
+    rippleEffect
+  >Not Answered
+  
+  </button>
+
+<button
+type="button"
+class="btn btn-outline-primary"
+(click)="changeStutes('Call_back ')"
+rippleEffect
+>Call Back 
+
+</button>
+      
+    </div>
+  </div>
+  
+</ng-template>
+<!-- / Modal delete promo -->

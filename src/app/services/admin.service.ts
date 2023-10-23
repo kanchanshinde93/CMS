@@ -44,10 +44,20 @@ export class AdminService {
     );
   }
 
+  
   addMeasurementConfig(measurementData: any): Observable<any> {
     return this.http.post<any>(this.baseUrl + "/v1/config/measurement", measurementData).pipe(
       map((data: any) => {
         return data;
+      })
+    );
+  }
+
+
+  changeStatus(id:any,body:any){
+    return this.http.post<any>(this.apiUrl + `/v1/lead/${id}/status`, body).pipe(
+      map((data: any) => {
+         return data;
       })
     );
   }
