@@ -195,7 +195,7 @@ export class NavbarComponent implements OnInit, OnDestroy {
         }, 0);
       }
     });
-
+   
     // Horizontal Layout Only: Add class fixed-top to navbar below large screen
     if (this.coreConfig.layout.type == 'horizontal') {
       // On every media(screen) change
@@ -222,5 +222,11 @@ export class NavbarComponent implements OnInit, OnDestroy {
     // Unsubscribe from all subscriptions
     this._unsubscribeAll.next();
     this._unsubscribeAll.complete();
+  }
+
+  Logout(){
+  this._router.navigate(['/pages/authentication/login-v2']);
+    localStorage.removeItem('user_id');
+    console.log("Loggeout");
   }
 }
