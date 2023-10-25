@@ -1,2 +1,7 @@
 @import "@core/scss/base/pages/page-faq.scss";
 @import "@core/scss/base/pages/dashboard-ecommerce.scss";
+a {
+    color: #ffffff !important;
+    text-decoration: none;
+    background-color: transparent;
+}

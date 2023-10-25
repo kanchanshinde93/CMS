@@ -8,6 +8,7 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { CoreCommonModule } from '@core/common.module';
 
 import { AuthLoginV2Component } from 'app/main/pages/authentication/auth-login-v2/auth-login-v2.component';
+import { ToastrModule } from 'ngx-toastr';
 
 // routing
 const routes: Routes = [
@@ -20,6 +21,6 @@ const routes: Routes = [
 
 @NgModule({
   declarations: [AuthLoginV2Component],
-  imports: [CommonModule, RouterModule.forChild(routes), NgbModule, FormsModule, ReactiveFormsModule, CoreCommonModule]
+  imports: [CommonModule, RouterModule.forChild(routes), NgbModule, ToastrModule,FormsModule, ReactiveFormsModule, CoreCommonModule]
 })
 export class AuthenticationModule {}

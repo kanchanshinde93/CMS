@@ -38,7 +38,7 @@
                   </h3> -->
                   <div class="d-flex justify-content-around">
                     <button type="button" class="btn btn-primary" rippleEffect>Skip</button>
-                    <button type="button" class="btn btn-primary" rippleEffect (click)="modalOPenCall(openModel,rows[0])">Call</button>
+                    <button type="button" class="btn btn-primary" rippleEffect (click)="modalOPenCall(openModel,rows[0])"><a [href]="sanitize('sip:'+sipnumber )" class="call-button">Call</a></button>
                   </div>
                 </div>
               </div>

@@ -6,6 +6,8 @@ import { Subject } from "rxjs";
 import { Router } from "@angular/router";
 import { CoreConfigService } from "@core/services/config.service";
 import { AdminService } from "app/services/admin.service";
+import { ToastrService } from "ngx-toastr";
+import { log } from "console";
 
 
 @Component({
@@ -32,7 +34,7 @@ export class AuthLoginV2Component implements OnInit {
    *
    * @param {CoreConfigService} _coreConfigService
    */
-  constructor(private _coreConfigService: CoreConfigService,private adminService: AdminService, private _formBuilder: UntypedFormBuilder, private _route: ActivatedRoute, private _router: Router) {
+  constructor(private _coreConfigService: CoreConfigService, private toastr:ToastrService,private adminService: AdminService, private _formBuilder: UntypedFormBuilder, private _route: ActivatedRoute, private _router: Router) {
     this._unsubscribeAll = new Subject();
 
     // Configure the layout
@@ -77,9 +79,35 @@ export class AuthLoginV2Component implements OnInit {
         "username":this.loginForm.value.email,
         "password":this.loginForm.value.password
       }
-      this.adminService.login(formData).subscribe((data:any)=>{
-        this._router.navigate(["/"]);
+      // this.adminService.login(formData).subscribe((data:any)=>{
+      //   this._router.navigate(['/']);
+      //   //console.log(data.status);
+      //   /* if(data.status){
+      //     this.toastr.success(data.message,"Success!");
+      //     this._router.navigate(['/']);
+      //   }
+      //   else{
+      //     this.toastr.error(data.message,"error!")
+          
+      //   } */
         
+      // })
+      this.adminService.login(formData).subscribe({
+        next: (response) => {
+         this._router.navigate(['/']);
+        this.toastr.success(response.message,"Success!");
+         },
+        error: (error) => {
+          console.log(error);
+        this.toastr.error(error.error.message,"error!");
+
+        },
+        complete: () => {
+          console.log("error");
+          // define on request complete logic
+          // 'complete' is not the same as 'finalize'!!
+          // this logic will not be executed if error is fired
+        }
       })
     }
   

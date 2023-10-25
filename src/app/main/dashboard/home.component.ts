@@ -3,6 +3,8 @@ import { Subject } from "rxjs";
 import { AdminService } from "app/services/admin.service";
 import { ColumnMode, DatatableComponent, SelectionType } from '@swimlane/ngx-datatable';
 import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
+import {DomSanitizer} from '@angular/platform-browser';
+
 
 @Component({
   selector: "app-home",
@@ -34,7 +36,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   // private
   private tempData = [];
   private _unsubscribeAll: Subject<any>;
-  public rows;
+  public rows=[];
   public tempFilterData;
   public previousStatusFilter = "";
 
@@ -47,15 +49,19 @@ export class HomeComponent implements OnInit, OnDestroy {
   userId: string;
   customerData: any;
   name:any
+  contactNumber: any;
 
   // private
-
+  sipnumber:any
+  ipNumber:any='@10.2.0.90'
   /**
    * Constructor
    *
    *
    */
-  constructor(private adminService: AdminService,private modalService: NgbModal) {
+  constructor(private adminService: AdminService,private modalService: NgbModal,private sanitizer:DomSanitizer) {
+   
+    
     this._unsubscribeAll = new Subject();
   }
 
@@ -90,6 +96,9 @@ export class HomeComponent implements OnInit, OnDestroy {
     };
     this.getAllList()
   }
+  sanitize(url:string){
+    return this.sanitizer.bypassSecurityTrustUrl(url);
+}
 
   getAllList() {
     this.adminService.getallList().subscribe((data: any) => {
@@ -99,6 +108,9 @@ export class HomeComponent implements OnInit, OnDestroy {
      console.log( this.userId);
       this.rows = data.data[this.userId];
       this.name=  this.rows[0]?.name;
+      this.contactNumber= this.rows[0]?.contact;
+      this.sipnumber=this.contactNumber+this.ipNumber;
+      console.log( this.sipnumber);
       this.tempData = this.rows;
       this.kitchenSinkRows = this.ListData;
       this.filteredData = this.ListData;
