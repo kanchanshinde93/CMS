@@ -4,6 +4,7 @@ import { AdminService } from "app/services/admin.service";
 import { ColumnMode, DatatableComponent, SelectionType } from '@swimlane/ngx-datatable';
 import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
 import {DomSanitizer} from '@angular/platform-browser';
+import { ToastrService } from "ngx-toastr";
 
 
 @Component({
@@ -54,12 +55,13 @@ export class HomeComponent implements OnInit, OnDestroy {
   // private
   sipnumber:any
   ipNumber:any='@10.2.0.90'
+  modalRef: import("@ng-bootstrap/ng-bootstrap").NgbModalRef;
   /**
    * Constructor
    *
    *
    */
-  constructor(private adminService: AdminService,private modalService: NgbModal,private sanitizer:DomSanitizer) {
+  constructor(private adminService: AdminService,private modalService: NgbModal,private toastr:ToastrService,private sanitizer:DomSanitizer) {
    
     
     this._unsubscribeAll = new Subject();
@@ -108,7 +110,7 @@ export class HomeComponent implements OnInit, OnDestroy {
       this.name=  this.rows[0]?.name;
       this.contactNumber= this.rows[0]?.contact;
       this.sipnumber=this.contactNumber+this.ipNumber;
-      console.log( this.sipnumber);
+     // console.log( this.sipnumber);
       this.tempData = this.rows;
       this.kitchenSinkRows = this.ListData;
       this.filteredData = this.ListData;
@@ -119,7 +121,7 @@ export class HomeComponent implements OnInit, OnDestroy {
       "status":"call_back"
     }
      this.adminService.changeStatus(data.leadId,body).subscribe((data: any) => {
-      console.log(data)
+     // console.log(data)
       this.getAllList();
     }) 
   }
@@ -129,18 +131,13 @@ export class HomeComponent implements OnInit, OnDestroy {
     this._unsubscribeAll.next();
     this._unsubscribeAll.complete();
   }
-  // modal delete promo
-  modalBannerDelete(bannerDelete:any) {
-    this.modalService.open(bannerDelete, {
-      centered: true,
-    });
-  }
+ 
 
   modalOPenCall(body:any,cutsData:any){
     this.customerData=cutsData;
-    console.log(this.customerData);
+    //console.log(this.customerData);
     
-    this.modalService.open(body, {
+    this.modalRef=this.modalService.open(body, {
       centered: true,
       size: 'lg'
     });
@@ -151,9 +148,25 @@ export class HomeComponent implements OnInit, OnDestroy {
   let body=  {
       "status":stutes,
   }
-  console.log(body);
-this.adminService.changeStatus(this.customerData.leadId,body).subscribe((data: any) => {
-  console.log(data)
-}) 
+ // console.log(body);
+this.adminService.changeStatus(this.customerData.leadId,body).subscribe({
+  next: (response) => {
+    this.modalRef.close();
+  this.getAllList();
+   
+  this.toastr.success(response.message,"Success!");
+   },
+  error: (error) => {
+    console.log(error);
+  this.toastr.error(error.error.message,"error!");
+
+  },
+  complete: () => {
+    console.log("error");
+    // define on request complete logic
+    // 'complete' is not the same as 'finalize'!!
+    // this logic will not be executed if error is fired
+  }
+})
 }
 }
