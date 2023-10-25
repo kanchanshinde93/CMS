@@ -103,9 +103,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   getAllList() {
     this.adminService.getallList().subscribe((data: any) => {
       this.ListData = data.data;
-      console.log(data.data);
-     this.userId= localStorage.getItem("user_id")
-     console.log( this.userId);
+      this.userId= localStorage.getItem("user_id")
       this.rows = data.data[this.userId];
       this.name=  this.rows[0]?.name;
       this.contactNumber= this.rows[0]?.contact;
@@ -116,20 +114,16 @@ export class HomeComponent implements OnInit, OnDestroy {
       this.filteredData = this.ListData;
     })
   }
-  /* filterUpdate(event: any) {
-    const val = event.target.value.toLowerCase();
-    // filter our data
-    this.rows = this.ListData.filter(function (d) {
-
-      return d.name?.toLowerCase().indexOf(val) !== -1  ;
-    });
-
-
-
-    // update the rows
-    this.kitchenSinkRows = this.rows;
-
-  } */
+  callApi(data:any){
+     let body=  {
+      "status":"call_back"
+    }
+     this.adminService.changeStatus(data.leadId,body).subscribe((data: any) => {
+      console.log(data)
+      this.getAllList();
+    }) 
+  }
+  
   ngOnDestroy(): void {
     // Unsubscribe from all subscriptions
     this._unsubscribeAll.next();
