@@ -2,9 +2,10 @@ import { Component, OnDestroy, OnInit, ViewChild } from "@angular/core";
 import { Subject } from "rxjs";
 import { AdminService } from "app/services/admin.service";
 import { ColumnMode, DatatableComponent, SelectionType } from '@swimlane/ngx-datatable';
-import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
-import {DomSanitizer} from '@angular/platform-browser';
+import { NgbModal, NgbModalConfig } from "@ng-bootstrap/ng-bootstrap";
+import { DomSanitizer } from '@angular/platform-browser';
 import { ToastrService } from "ngx-toastr";
+import { log } from "console";
 
 
 @Component({
@@ -15,7 +16,7 @@ import { ToastrService } from "ngx-toastr";
 export class HomeComponent implements OnInit, OnDestroy {
   // public
   public data: any;
- 
+
   public basicSelectedOption: number = 10;
   public ColumnMode = ColumnMode;
   public selectStatus: any = [
@@ -37,7 +38,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   // private
   private tempData = [];
   private _unsubscribeAll: Subject<any>;
-  public rows=[];
+  public rows = [];
   public tempFilterData;
   public previousStatusFilter = "";
 
@@ -49,22 +50,23 @@ export class HomeComponent implements OnInit, OnDestroy {
   filteredData: any;
   userId: string;
   customerData: any;
-  name:any
+  name: any
   contactNumber: any;
+  remark: any = '';
 
   // private
-  sipnumber:any
-  ipNumber:any='@10.2.0.90'
+  sipnumber: any
+  ipNumber: any = '@10.2.0.90'
   modalRef: import("@ng-bootstrap/ng-bootstrap").NgbModalRef;
   /**
    * Constructor
    *
    *
    */
-  constructor(private adminService: AdminService,private modalService: NgbModal,private toastr:ToastrService,private sanitizer:DomSanitizer) {
-   
-    
+  constructor(private config: NgbModalConfig, private adminService: AdminService, private modalService: NgbModal, private toastr: ToastrService, private sanitizer: DomSanitizer) {
     this._unsubscribeAll = new Subject();
+    config.backdrop = 'static';
+    config.keyboard = false;
   }
 
   // Lifecycle Hooks
@@ -98,75 +100,84 @@ export class HomeComponent implements OnInit, OnDestroy {
     };
     this.getAllList()
   }
-  sanitize(url:string){
+  sanitize(url: string) {
     return this.sanitizer.bypassSecurityTrustUrl(url);
-}
+  }
 
   getAllList() {
     this.adminService.getallList().subscribe((data: any) => {
       this.ListData = data.data;
-      this.userId= localStorage.getItem("user_id")
+      this.userId = localStorage.getItem("user_id")
       this.rows = data.data[this.userId];
-      this.name=  this.rows[0]?.name;
-      this.contactNumber= this.rows[0]?.contact;
-      this.sipnumber=this.contactNumber+this.ipNumber;
-     // console.log( this.sipnumber);
+      this.name = this.rows[0]?.name;
+      this.contactNumber = this.rows[0]?.contact;
+      this.sipnumber = this.contactNumber + this.ipNumber;
+      // console.log( this.sipnumber);
       this.tempData = this.rows;
       this.kitchenSinkRows = this.ListData;
       this.filteredData = this.ListData;
     })
   }
-  callApi(data:any){
-     let body=  {
-      "status":"call_back"
+  callApi(data: any) {
+    console.log(data);
+    let body = {
+      "userId": localStorage.getItem("user_id"),
+      "status": "call_back",
+      "remark": this.remark
     }
-     this.adminService.changeStatus(data.leadId,body).subscribe((data: any) => {
-     // console.log(data)
+    console.log(body);
+
+    this.adminService.changeStatus(data.leadId, body).subscribe((data: any) => {
+      // console.log(data)
       this.getAllList();
-    }) 
+    })
   }
-  
+
   ngOnDestroy(): void {
     // Unsubscribe from all subscriptions
     this._unsubscribeAll.next();
     this._unsubscribeAll.complete();
   }
- 
 
-  modalOPenCall(body:any,cutsData:any){
-    this.customerData=cutsData;
+  modalOPenCall(body: any, cutsData: any) {
+
+    this.customerData = cutsData;
     //console.log(this.customerData);
-    
-    this.modalRef=this.modalService.open(body, {
+
+    this.modalRef = this.modalService.open(body, {
       centered: true,
-      size: 'lg'
+      size: 'lg',
+
+
     });
   }
 
 
-  changeStutes(stutes:any){
-  let body=  {
-      "status":stutes,
-  }
- // console.log(body);
-this.adminService.changeStatus(this.customerData.leadId,body).subscribe({
-  next: (response) => {
-    this.modalRef.close();
-  this.getAllList();
-   
-  this.toastr.success(response.message,"Success!");
-   },
-  error: (error) => {
-    console.log(error);
-  this.toastr.error(error.error.message,"error!");
+  changeStutes(stutes: any) {
+    let body = {
+      "status": stutes,
+      "userId": localStorage.getItem("user_id"),
+      "remark": this.remark
+    }
+    console.log(body);
+    this.adminService.changeStatus(this.customerData.leadId, body).subscribe({
+      next: (response) => {
+        this.modalRef.close();
+        this.getAllList();
 
-  },
-  complete: () => {
-    console.log("error");
-    // define on request complete logic
-    // 'complete' is not the same as 'finalize'!!
-    // this logic will not be executed if error is fired
+        this.toastr.success(response.message, "Success!");
+      },
+      error: (error) => {
+        console.log(error);
+        this.toastr.error(error.error.message, "error!");
+
+      },
+      complete: () => {
+        console.log("error");
+        // define on request complete logic
+        // 'complete' is not the same as 'finalize'!!
+        // this logic will not be executed if error is fired
+      }
+    })
   }
-})
-}
 }

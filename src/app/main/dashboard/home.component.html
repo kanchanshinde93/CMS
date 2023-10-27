@@ -25,7 +25,8 @@
         <div class="col-md-3 mb-2 mb-md-0">
           <ul ngbNav #navVertical="ngbNav" class="nav nav-pills flex-column nav-left">
             <li class="nav-item" ngbNavItem>
-              <a ngbNavLink class="nav-link d-flex py-75" id="payment" data-toggle="pill" href="#faq-payment" aria-expanded="true" role="tab">
+              <a ngbNavLink class="nav-link d-flex py-75" id="payment" data-toggle="pill" href="#faq-payment"
+                aria-expanded="true" role="tab">
                 <i data-feather="phone-call" class="font-medium-3 mr-1"></i>
                 <span class="font-weight-bold">Call List</span>
               </a>
@@ -38,13 +39,16 @@
                   </h3> -->
                   <div class="d-flex justify-content-around">
                     <button type="button" class="btn btn-primary" rippleEffect (click)="callApi(rows[0])">Skip</button>
-                    <button type="button" class="btn btn-primary" rippleEffect (click)="modalOPenCall(openModel,rows[0])"><a [href]="sanitize('sip:'+sipnumber )" class="call-button">Call</a></button>
+                    <button type="button" class="btn btn-primary" rippleEffect
+                      (click)="modalOPenCall(openModel,rows[0])"><a [href]="sanitize('sip:'+sipnumber )"
+                        class="call-button">Call</a></button>
                   </div>
                 </div>
               </div>
               <ng-template ngbNavContent>
                 <!-- Call List panel -->
-                <div role="tabpanel" class="tab-pane active collapse-icon" id="faq-payment" aria-labelledby="payment" aria-expanded="true">
+                <div role="tabpanel" class="tab-pane active collapse-icon" id="faq-payment" aria-labelledby="payment"
+                  aria-expanded="true">
                   <!-- icon and header -->
                   <div class="d-flex align-items-center">
                     <div class="avatar avatar-tag bg-light-primary mr-1">
@@ -60,56 +64,57 @@
                   <div class="accordion collapse-margin mt-2">
                     <ng-container *ngIf="data.length; else noResults">
                       <ngb-accordion [destroyOnHide]="false" [closeOthers]="true" activeIds="paymentId1">
-                        <ngb-panel id="paymentId{{ i }}" [cardClass]="'collapse-margin'" *ngFor="let paymentRef of data">
+                        <ngb-panel id="paymentId{{ i }}" [cardClass]="'collapse-margin'"
+                          *ngFor="let paymentRef of data">
                           <ng-template ngbPanelTitle>
                             <span>{{ paymentRef.title }}</span>
                           </ng-template>
                           <ng-template ngbPanelContent>
-                          <!-- table -->
-                          <div class="row">
-                            <div class="col-md-6 col-12">
+                            <!-- table -->
+                            <div class="row">
+                              <div class="col-md-6 col-12">
                                 <div class="d-flex justify-content-between align-items-center m-1">
-                                    <label class="d-flex align-items-center">Show
-                                        <select class="form-control mx-25" [(ngModel)]="basicSelectedOption">
-                                            <option value="10">10</option>
-                                            <option value="25">25</option>
-                                            <option value="50">50</option>
-                                            <option value="100">100</option>
-                                        </select>
-                                        </label>
+                                  <label class="d-flex align-items-center">Show
+                                    <select class="form-control mx-25" [(ngModel)]="basicSelectedOption">
+                                      <option value="10">10</option>
+                                      <option value="25">25</option>
+                                      <option value="50">50</option>
+                                      <option value="100">100</option>
+                                    </select>
+                                  </label>
                                 </div>
-                            </div>
-                            <div class="col-md-6 col-12 d-flex justify-content-md-end">
+                              </div>
+                              <div class="col-md-6 col-12 d-flex justify-content-md-end">
                                 <div class="d-flex align-items-center justify-content-end pb-1 pl-1 pl-md-0 pb-md-0">
-                                    
-                                   <!--  <div class="input-group mb-1 search-table">
+
+                                  <!--  <div class="input-group mb-1 search-table">
                                         <input type="search" placeholder="Search" class="form-control ml-25"
                                             (keyup)="filterUpdate($event)" (search)="filterUpdate($event)" />
                                     </div> -->
-                                 <!--    <button csvLink (click)="downloadCSV($event)"
+                                  <!--    <button csvLink (click)="downloadCSV($event)"
                                         class="btn btn-outline-secondary float-right csv-export" rippleEffect><img
                                             src="assets/images/icons/csv.png" alt=""> </button> -->
                                 </div>
+                              </div>
                             </div>
-                        </div>
-        
-                        <!-- ngx-datatables responsive -->
-                        <ngx-datatable #table class="bootstrap core-bootstrap" [columnMode]="ColumnMode.force"
-                            [headerHeight]="40" [rowHeight]="58" [footerHeight]="50" rowHeight="auto" [limit]="basicSelectedOption" [rows]="rows"
-                            [scrollbarH]="true">
-                            <ngx-datatable-column name="Serial" prop="serial" [width]="150"></ngx-datatable-column>
-                            <ngx-datatable-column name=" Name" prop="name" [width]="150"></ngx-datatable-column>
-                             <!--  <ngx-datatable-column name="Contact" prop="contact" [width]="150">
+
+                            <!-- ngx-datatables responsive -->
+                            <ngx-datatable #table class="bootstrap core-bootstrap" [columnMode]="ColumnMode.force"
+                              [headerHeight]="40" [rowHeight]="58" [footerHeight]="50" rowHeight="auto"
+                              [limit]="basicSelectedOption" [rows]="rows" [scrollbarH]="true">
+                              <ngx-datatable-column name="Serial" prop="serial" [width]="150"></ngx-datatable-column>
+                              <ngx-datatable-column name=" Name" prop="name" [width]="150"></ngx-datatable-column>
+                              <!--  <ngx-datatable-column name="Contact" prop="contact" [width]="150">
                               <ng-template let-closeStatus="Zone" ngx-datatable-cell-template>
                                     <div class="badge badge-pill" [ngClass]="selectButtonClass(closeStatus)">
                                       {{ closeStatus }}
                                     </div>
                                   </ng-template> 
                             </ngx-datatable-column>-->
-                            <ngx-datatable-column name="Zone" prop="zone" [width]="150"></ngx-datatable-column>
-                            <ngx-datatable-column name="status" prop="status" [width]="150"></ngx-datatable-column>
-                            <ngx-datatable-column name="Is Active" prop="isActive" [width]="150">
-                               <!--  <ng-template let-verificationStatus="value" ngx-datatable-cell-template>
+                              <ngx-datatable-column name="Zone" prop="zone" [width]="150"></ngx-datatable-column>
+                              <ngx-datatable-column name="status" prop="status" [width]="150"></ngx-datatable-column>
+                              <ngx-datatable-column name="Is Active" prop="isActive" [width]="150">
+                                <!--  <ng-template let-verificationStatus="value" ngx-datatable-cell-template>
                                     <div class="badge badge-pill" 
                                     [ngClass]="{
                                       'badge-light-success': verificationStatus,
@@ -119,10 +124,10 @@
                                     {{verificationStatus}}
                                     </div>
                                   </ng-template> -->
-                            </ngx-datatable-column>
-                            
-                        </ngx-datatable>
-                        <!--/ ngx-datatables responsive -->
+                              </ngx-datatable-column>
+
+                            </ngx-datatable>
+                            <!--/ ngx-datatables responsive -->
                           </ng-template>
                         </ngb-panel>
                       </ngb-accordion>
@@ -160,54 +165,36 @@
     >
       <span aria-hidden="true">&times;</span>
     </button> -->
+
   </div>
   <div class="modal-body" tabindex="0" ngbAutofocus>
-    
+    <div class="form-group">
+      <label class="form-label" for="">Remark</label>
+      <input type="text" [(ngModel)]="remark" class="form-control"
+        [ngClass]="{ 'is-invalid': submitted && f.email.errors }" placeholder="Enter Remark" autofocus=""
+        tabindex="1" />
+    </div>
     <div class="modal-footer">
-      <button
-        type="button"
-        class="btn btn-outline-primary"
-        (click)="changeStutes('Completed')"
-        rippleEffect
-      >
-      Completed
+      <button type="button" class="btn btn-outline-primary" (click)="changeStutes('Completed')" rippleEffect>
+        Completed
       </button>
-      <button
-      type="button"
-      class="btn btn-outline-primary"
-      (click)="changeStutes('rejected')"
-      rippleEffect
-    >
-    Rejected
-    </button>
-    <button
-    type="button"
-    class="btn btn-outline-primary"
-    (click)="changeStutes('not_answered')"
-    rippleEffect
-  >Not Answered
-  
-  </button>
+      <button type="button" class="btn btn-outline-primary" (click)="changeStutes('rejected')" rippleEffect>
+        Rejected
+      </button>
+      <button type="button" class="btn btn-outline-primary" (click)="changeStutes('not_answered')" rippleEffect>Not
+        Answered
 
-<button
-type="button"
-class="btn btn-outline-primary"
-(click)="changeStutes('Call_back ')"
-rippleEffect
->Call Back 
+      </button>
 
-</button>
-<button
-type="button"
-class="btn btn-outline-primary"
-(click)="changeStutes('failed')"
-rippleEffect
->Failed
- 
+      <button type="button" class="btn btn-outline-primary" (click)="changeStutes('Call_back ')" rippleEffect>Call Back
 
-</button>
+      </button>
+      <button type="button" class="btn btn-outline-primary" (click)="changeStutes('failed')" rippleEffect>Failed
+
+
+      </button>
     </div>
   </div>
-  
+
 </ng-template>
 <!-- / Modal delete promo -->
