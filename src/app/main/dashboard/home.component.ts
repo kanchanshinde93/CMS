@@ -5,7 +5,7 @@ import { ColumnMode, DatatableComponent, SelectionType } from '@swimlane/ngx-dat
 import { NgbModal, NgbModalConfig } from "@ng-bootstrap/ng-bootstrap";
 import { DomSanitizer } from '@angular/platform-browser';
 import { ToastrService } from "ngx-toastr";
-import { log } from "console";
+import { Console, log } from "console";
 
 
 @Component({
@@ -38,7 +38,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   // private
   private tempData = [];
   private _unsubscribeAll: Subject<any>;
-  public rows = [];
+  rows = [];
   public tempFilterData;
   public previousStatusFilter = "";
 
@@ -109,13 +109,20 @@ export class HomeComponent implements OnInit, OnDestroy {
       this.ListData = data.data;
       this.userId = localStorage.getItem("user_id")
       this.rows = data.data[this.userId];
-      this.name = this.rows[0]?.name;
-      this.contactNumber = this.rows[0]?.contact;
-      this.sipnumber = this.contactNumber + this.ipNumber;
-      // console.log( this.sipnumber);
-      this.tempData = this.rows;
-      this.kitchenSinkRows = this.ListData;
-      this.filteredData = this.ListData;
+      if (this.rows.length === 0) {
+        console.log('The array is empty.');
+        this.toastr.warning("NO LEAD FOUND!");
+      } else {
+        console.log(this.rows);
+        this.name = this.rows[0]?.name;
+        this.contactNumber = this.rows[0]?.contact;
+        this.sipnumber = this.contactNumber + this.ipNumber;
+        // console.log( this.sipnumber);
+        this.tempData = this.rows;
+        this.kitchenSinkRows = this.ListData;
+        this.filteredData = this.ListData;
+      }
+
     })
   }
   callApi(data: any) {
